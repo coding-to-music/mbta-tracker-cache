@@ -1,3 +1,35 @@
+# mbta-tracker-cache
+
+# 🚀 The data aggregator for the new train display system for Boston's MBTA by TransitMatters: https://newtrains.today 🚀
+
+https://github.com/coding-to-music/mbta-tracker-cache
+
+From / By https://github.com/mathcolo/tracker-cache (appears to no longer be public, does not exist)
+
+https://github.com/coding-to-music/tracker-cache (clone made in 2019)
+
+https://github.com/mathcolo/tracker-static (front end)
+
+## Environment variables:
+
+In the project root, create a file named `secrets.py` and populate it with your MBTA v3 API key: `API_KEY = <KEY>`
+
+```java
+API_KEY = <KEY>
+```
+
+## GitHub
+
+```java
+git init
+git add .
+git remote remove origin
+git commit -m "first commit"
+git branch -M main
+git remote add origin git@github.com:coding-to-music/mbta-tracker-cache.git
+git push -u origin main
+```
+
 # tracker-cache
 tracker-cache is the backend for [https://newtrains.today](https://newtrains.today). The browser display components are located [here](https://github.com/mathcolo/tracker-static).
 
