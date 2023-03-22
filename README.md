@@ -197,3 +197,26 @@ pyenv versions
   3.6.15/envs/py3.6
 * py3.6 --> /home/tmc/.pyenv/versions/3.6.15/envs/py3.6 (set by PYENV_VERSION environment variable)
 ```
+
+## Install missing libraries
+
+```java
+sudo apt-get install build-essential libbz2-dev libssl-dev libffi-dev libncurses5-dev libncursesw5-dev libreadline-dev libsqlite3-dev liblzma-dev zlib1g-dev
+```
+
+## Another install attempt
+
+```
+pipenv install
+```
+
+```
+Pipfile.lock not found, creating…
+Locking [dev-packages] dependencies…
+Locking [packages] dependencies…
+Updated Pipfile.lock (db4242)!
+Installing dependencies from Pipfile.lock (db4242)…
+  🐍   ▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉ 0/0 — 00:00:00
+To activate this project's virtualenv, run the following:
+ $ pipenv shell
+``` 

@@ -4,15 +4,15 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
-redis = "*"
-requests = "*"
-Flask = "*"
+# redis = "*"
+# requests = "*"
+# Flask = "*"
 # gunicorn = "*"
 # psycopg2-binary = "*"
 
 [dev-packages]
 # pylint = "*"
-rope = "*"
+# rope = "*"
 
 [requires]
 python_version = "3.8"
