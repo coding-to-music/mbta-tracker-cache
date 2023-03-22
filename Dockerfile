@@ -7,8 +7,11 @@ ENV DEBIAN_FRONTEND=noninteractive
 # echo "deb [signed-by=/usr/share/keyrings/redis-archive-keyring.gpg] https://packages.redis.io/deb $(lsb_release -cs) main" | sudo tee /etc/apt/sources.list.d/redis.list
 # sudo apt-get update
 
-# Then run this Dockerfile via:
+# Then build this Dockerfile via:
 # docker build -t redis-postgres .
+
+# Then run the built dockerfile via:
+# docker run -d --name redis-postgres-container -p 5432:5432 -p 6379:6379 redis-postgres
 
 # FROM docker.io/library/ubuntu:latest
 # RUN echo "nameserver 8.8.8.8" >> /etc/resolv.conf && \
