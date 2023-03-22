@@ -202,6 +202,10 @@ pyenv versions
 
 ```java
 sudo apt-get install build-essential libbz2-dev libssl-dev libffi-dev libncurses5-dev libncursesw5-dev libreadline-dev libsqlite3-dev liblzma-dev zlib1g-dev
+
+sudo apt-get install libpq-dev python3-dev
+
+pip install psycopg2-binary
 ```
 
 ## Another install attempt
@@ -220,3 +224,89 @@ Installing dependencies from Pipfile.lock (db4242)…
 To activate this project's virtualenv, run the following:
  $ pipenv shell
 ``` 
+
+## create a docker file to install both redis and postgresql
+
+Here's a Dockerfile that installs both Redis and PostgreSQL:
+
+```java
+FROM ubuntu:latest
+
+# Install dependencies
+RUN apt-get update && apt-get install -y \
+    wget \
+    gnupg2 \
+    apt-transport-https \
+    ca-certificates \
+    curl \
+    software-properties-common
+
+# Install Redis
+RUN wget -O /etc/apt/trusted.gpg.d/redis-server.gpg https://packages.redis.com/redis.key && \
+    echo "deb https://packages.redis.com/apt $(lsb_release -cs) main" > /etc/apt/sources.list.d/redis.list && \
+    apt-get update && apt-get install -y redis-server && \
+    sed -i 's/bind 127.0.0.1 ::1/bind 0.0.0.0/' /etc/redis/redis.conf && \
+    echo "requirepass redis_password" >> /etc/redis/redis.conf
+
+# Install PostgreSQL
+RUN curl https://www.postgresql.org/media/keys/ACCC4CF8.asc | apt-key add - && \
+    echo "deb http://apt.postgresql.org/pub/repos/apt/ $(lsb_release -cs)-pgdg main" > /etc/apt/sources.list.d/pgdg.list && \
+    apt-get update && apt-get install -y postgresql postgresql-contrib && \
+    sed -i "s/#listen_addresses = 'localhost'/listen_addresses = '*'/g" /etc/postgresql/13/main/postgresql.conf && \
+    echo "host all all 0.0.0.0/0 md5" >> /etc/postgresql/13/main/pg_hba.conf && \
+    echo "host all all ::/0 md5" >> /etc/postgresql/13/main/pg_hba.conf && \
+    echo "postgres:postgres_password" | chpasswd
+
+# Expose ports
+EXPOSE 5432
+EXPOSE 6379
+
+# Start services
+CMD service postgresql start && service redis-server start && tail -f /dev/null
+```
+
+This Dockerfile will:
+
+- Use Ubuntu as the base image.
+- Install necessary dependencies such as wget, gnupg2, apt-transport-https, ca-certificates, and curl.
+- Install Redis by downloading the Redis key, adding the Redis repository to the package manager, installing Redis server, and configuring it to listen to all network interfaces and require a password.
+- Install PostgreSQL by downloading the PostgreSQL key, adding the PostgreSQL repository to the package manager, installing PostgreSQL server and its dependencies, and configuring it to listen to all network interfaces and allow password authentication.
+
+- Expose ports for PostgreSQL (5432) and Redis (6379).
+- Start PostgreSQL and Redis services, and then run a tail -f /dev/null command to keep the container running indefinitely.
+
+
+You can name the file Dockerfile as this is the conventional name for a Dockerfile. To build an image from this Dockerfile, you can run the following command in the same directory as the Dockerfile:
+
+```java
+docker build -t redis-postgres .
+```
+
+This will create a Docker image with the tag redis-postgres. Once the image is built, you can run a container from the image using the following command:
+
+```java
+docker run -d --name redis-postgres-container -p 5432:5432 -p 6379:6379 redis-postgres
+```
+
+This will start a Docker container with the name redis-postgres-container, forwarding the container's PostgreSQL and Redis ports to the host machine's PostgreSQL and Redis ports respectively.
+
+To stop the container, you can run the following command:
+
+```java
+docker stop redis-postgres-container
+```
+
+This will stop the container. You can start the container again with the same docker run command above.
+
+If you want to remove the container completely, you can run the following command:
+
+```java
+docker rm redis-postgres-container
+```
+
+This will remove the container. If you want to remove the image, you can run:
+
+```java
+docker rmi redis-postgres
+```
+This will remove the redis-postgres image.
