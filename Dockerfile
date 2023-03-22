@@ -2,6 +2,10 @@ FROM ubuntu:latest
 
 ENV DEBIAN_FRONTEND=noninteractive
 
+ENV POSTGRES_USER=myuser
+ENV POSTGRES_PASS=mypassword
+ENV POSTGRES_DB=mydb
+
 # First run this at the command line:
 # curl -fsSL https://packages.redis.io/gpg | sudo gpg --dearmor -o /usr/share/keyrings/redis-archive-keyring.gpg
 # echo "deb [signed-by=/usr/share/keyrings/redis-archive-keyring.gpg] https://packages.redis.io/deb $(lsb_release -cs) main" | sudo tee /etc/apt/sources.list.d/redis.list
@@ -12,6 +16,9 @@ ENV DEBIAN_FRONTEND=noninteractive
 
 # Then run the built dockerfile via:
 # docker run -d --name redis-postgres-container -p 5432:5432 -p 6379:6379 redis-postgres
+
+# To stop the container:
+# docker stop redis-postgres-container
 
 # FROM docker.io/library/ubuntu:latest
 # RUN echo "nameserver 8.8.8.8" >> /etc/resolv.conf && \

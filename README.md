@@ -310,3 +310,98 @@ This will remove the container. If you want to remove the image, you can run:
 docker rmi redis-postgres
 ```
 This will remove the redis-postgres image.
+
+## View what is running inside the container
+
+```
+docker exec -it redis-postgres-container bash
+```
+
+Run this inside the container
+
+```
+ps -aux
+```
+
+Output
+
+```
+USER         PID %CPU %MEM    VSZ   RSS TTY      STAT START   TIME COMMAND
+root           1  0.0  0.0   2880   964 ?        Ss   05:08   0:00 /bin/sh -c service postgresql start && service redis-server start && tail -f /dev/null
+postgres      22  0.0  0.1 216612 30124 ?        Ss   05:08   0:00 /usr/lib/postgresql/15/bin/postgres -D /var/lib/postgresql/15/main -c config_file=/etc/postgresql/15/main/postgresql.conf
+postgres      23  0.0  0.0 216740  8524 ?        Ss   05:08   0:00 postgres: 15/main: checkpointer 
+postgres      24  0.0  0.0 216752  6968 ?        Ss   05:08   0:00 postgres: 15/main: background writer 
+postgres      26  0.0  0.0 216612 11556 ?        Ss   05:08   0:00 postgres: 15/main: walwriter 
+postgres      27  0.0  0.0 218200  9636 ?        Ss   05:08   0:00 postgres: 15/main: autovacuum launcher 
+postgres      28  0.0  0.0 218180  9568 ?        Ss   05:08   0:00 postgres: 15/main: logical replication launcher 
+redis         49  0.2  0.0  64208  6340 ?        Ssl  05:08   0:01 /usr/bin/redis-server 0.0.0.0:6379
+root          50  0.0  0.0   2812  1004 ?        S    05:08   0:00 tail -f /dev/null
+root          60  0.0  0.0   4616  3816 pts/0    Ss   05:13   0:00 bash
+root          85  0.0  0.0   7360  2992 pts/0    R+   05:17   0:00 ps -aux
+```
+
+## See what Docker containers are running
+
+```
+docker ps
+```
+
+```
+CONTAINER ID   IMAGE            COMMAND                  CREATED          STATUS          PORTS                                            NAMES
+1bb3a8b41260   redis-postgres   "/bin/sh -c 'service…"   16 minutes ago   Up 16 minutes   0.0.0.0:5432->5432/tcp, 0.0.0.0:6379->6379/tcp   redis-postgres-container
+```
+
+## Attempt to run the python programs
+
+```
+python pull.py
+```
+
+```
+Traceback (most recent call last):
+  File "pull.py", line 15, in <module>
+    postgres_conn = psycopg2.connect(dbname=secrets.POSTGRES_DB, user=secrets.POSTGRES_USER)
+  File "/home/tmc/.local/share/virtualenvs/mbta-tracker-cache-LnrdrKmS/lib/python3.8/site-packages/psycopg2/__init__.py", line 122, in connect
+    conn = _connect(dsn, connection_factory=connection_factory, **kwasync)
+psycopg2.OperationalError: connection to server on socket "/var/run/postgresql/.s.PGSQL.5432" failed: No such file or directory
+        Is the server running locally and accepting connections on that socket?
+```
+
+```
+python server.py
+```
+ 
+```
+ * Serving Flask app 'server'
+ * Debug mode: on
+Traceback (most recent call last):
+  File "server.py", line 50, in <module>
+    app.run(host='0.0.0.0', debug=True)
+  File "/home/tmc/.local/share/virtualenvs/mbta-tracker-cache-LnrdrKmS/lib/python3.8/site-packages/flask/app.py", line 1191, in run
+    run_simple(t.cast(str, host), port, self, **options)
+  File "/home/tmc/.local/share/virtualenvs/mbta-tracker-cache-LnrdrKmS/lib/python3.8/site-packages/werkzeug/serving.py", line 1030, in run_simple
+    application = DebuggedApplication(application, evalex=use_evalex)
+  File "/home/tmc/.local/share/virtualenvs/mbta-tracker-cache-LnrdrKmS/lib/python3.8/site-packages/werkzeug/debug/__init__.py", line 284, in __init__
+    self.secret = gen_salt(20)
+  File "/home/tmc/.local/share/virtualenvs/mbta-tracker-cache-LnrdrKmS/lib/python3.8/site-packages/werkzeug/security.py", line 24, in gen_salt
+    return "".join(secrets.choice(SALT_CHARS) for _ in range(length))
+  File "/home/tmc/.local/share/virtualenvs/mbta-tracker-cache-LnrdrKmS/lib/python3.8/site-packages/werkzeug/security.py", line 24, in <genexpr>
+    return "".join(secrets.choice(SALT_CHARS) for _ in range(length))
+AttributeError: module 'secrets' has no attribute 'choice'
+```
+
+```
+python pull.py
+```
+
+```
+Traceback (most recent call last):
+  File "pull.py", line 16, in <module>
+    postgres_conn = psycopg2.connect(dbname=mysecrets.POSTGRES_DB, user=mysecrets.POSTGRES_USER)
+  File "/home/tmc/.local/share/virtualenvs/mbta-tracker-cache-LnrdrKmS/lib/python3.8/site-packages/psycopg2/__init__.py", line 122, in connect
+    conn = _connect(dsn, connection_factory=connection_factory, **kwasync)
+psycopg2.OperationalError: connection to server on socket "/var/run/postgresql/.s.PGSQL.5432" failed: No such file or directory
+        Is the server running locally and accepting connections on that socket?
+
+(mbta-tracker-cache-LnrdrKmS)
+```

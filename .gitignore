@@ -1,5 +1,6 @@
 # tracker-cache stuff
 secrets.py
+mysecrets.py
 .vscode/
 
 # Byte-compiled / optimized / DLL files

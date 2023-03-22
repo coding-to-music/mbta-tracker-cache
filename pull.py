@@ -5,16 +5,17 @@ import json as JSON
 import psycopg2
 import psycopg2.extras
 from Fleet import car_is_new, car_array_is_new
+import mysecrets
 import secrets
 
 redis_conn = redis.StrictRedis(host='localhost', port=6379, db=0)
 routes = ['Red', 'Orange', 'Green-B', 'Green-C', 'Green-D', 'Green-E']
 routes_with_green_coalesced = [['Red'], ['Orange'], ['Green-B', 'Green-C', 'Green-D', 'Green-E']]
 
-if secrets.POSTGRES_IDENT:
-    postgres_conn = psycopg2.connect(dbname=secrets.POSTGRES_DB, user=secrets.POSTGRES_USER)
+if mysecrets.POSTGRES_IDENT:
+    postgres_conn = psycopg2.connect(dbname=mysecrets.POSTGRES_DB, user=mysecrets.POSTGRES_USER)
 else:
-    postgres_conn = psycopg2.connect(host=secrets.POSTGRES_HOST, dbname=secrets.POSTGRES_DB, user=secrets.POSTGRES_USER, password=secrets.POSTGRES_PASS)
+    postgres_conn = psycopg2.connect(host=mysecrets.POSTGRES_HOST, dbname=mysecrets.POSTGRES_DB, user=mysecrets.POSTGRES_USER, password=mysecrets.POSTGRES_PASS)
 
 DB_LOG_TABLE_NAME = 'newtrains_history'
 json = API.getV3('vehicles', 'route', ','.join(routes), suffix='&include=stop')
