@@ -7,11 +7,11 @@ name = "pypi"
 redis = "*"
 requests = "*"
 Flask = "*"
-gunicorn = "*"
-psycopg2-binary = "*"
+# gunicorn = "*"
+# psycopg2-binary = "*"
 
 [dev-packages]
-pylint = "*"
+# pylint = "*"
 rope = "*"
 
 [requires]

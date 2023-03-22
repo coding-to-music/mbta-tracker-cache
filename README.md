@@ -85,3 +85,115 @@ lf.repository.get_dependencies(ireq)
     raise InstallationError(
 pip9.exceptions.InstallationError: Command "python setup.py egg_info" failed with error code 1 in /tmp/tmplbyvhzljbuild/psycopg2-binary/
 ```
+
+# install virtualenv
+
+Using virtualenv, you can create isolated Python environments for each project or application, which can be used to install and manage different versions of Python and packages.
+
+Here are the steps to install Python 3.6 alongside Python 3.8 using virtualenv:
+
+Install virtualenv by running the following command:
+
+```java
+sudo apt-get install virtualenv
+```
+
+Create a new virtual environment for Python 3.6 by running the following command:
+
+```java
+virtualenv -p python3.6 pyenv36
+```
+
+This will create a new virtual environment named myenv36 with Python 3.6 as the default Python version.
+
+Activate the virtual environment by running the following command:
+
+```java
+source pyenv36/bin/activate
+```
+
+This will activate the virtual environment and set the default Python version to Python 3.6.
+
+Install any packages or dependencies you need for your project using pip, just like you would in a regular Python environment.
+
+To switch back to the system-wide Python installation or another virtual environment, you can deactivate the current virtual environment by running the following command:
+
+```java
+deactivate
+```
+
+This will deactivate the current virtual environment and return you to the system-wide Python installation.
+
+You can repeat these steps to create additional virtual environments for different versions of Python, and switch between them as needed for different projects or applications.
+
+## Here are the steps to install Python 3.6 alongside Python 3.8 using pyenv:
+
+Install pyenv by following the instructions in the official pyenv GitHub repository: https://github.com/pyenv/pyenv#installation
+
+You'll need to choose the installation method appropriate for your system. For Ubuntu, you can use the curl method as follows:
+
+```java
+curl https://pyenv.run | bash
+```
+
+Install Python 3.6 using pyenv by running the following command:
+
+```java
+pyenv install 3.6.15
+
+pyenv install 3.8
+```
+
+This will download and install Python 3.6.0 into your pyenv installation.
+
+Create a new virtual environment for Python 3.6 by running the following command:
+
+```java
+pyenv virtualenv 3.6.15 py3.6
+
+pyenv virtualenv 3.8 py3.8
+```
+
+This will create a new virtual environment named myenv36 with Python 3.6.0 as the default Python version.
+
+Activate the virtual environment by running the following command:
+
+```java
+pyenv activate py3.6
+
+pyenv activate py3.8
+```
+
+This will activate the virtual environment and set the default Python version to Python 3.6.0.
+
+Install any packages or dependencies you need for your project using pip, just like you would in a regular Python environment.
+
+To switch back to the system-wide Python installation or another virtual environment, you can deactivate the current virtual environment by running the following command:
+
+```java
+pyenv deactivate
+```
+
+This will deactivate the current virtual environment and return you to the system-wide Python installation.
+
+## Add this to .bash_aliases or .bashrc
+
+```java
+export PYENV_ROOT="$HOME/.pyenv"
+command -v pyenv >/dev/null || export PATH="$PYENV_ROOT/bin:$PATH"
+eval "$(pyenv init -)"
+```
+
+
+## List installed pyenv environments
+
+```java
+pyenv versions
+```
+
+```java
+  system
+  3.6.15
+  3.6.15/envs/py3.6
+* py3.6 --> /home/tmc/.pyenv/versions/3.6.15/envs/py3.6 (set by PYENV_VERSION environment variable)
+```
